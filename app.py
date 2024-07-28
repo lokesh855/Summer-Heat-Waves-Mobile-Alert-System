@@ -17,7 +17,7 @@ scaler = joblib.load('scaler.pkl')  # Ensure you save the scaler during preproce
 # Initialize Firebase Admin SDK
 def initialize_firebase():
     if not firebase_admin._apps:
-        cred = credentials.Certificate('android-e489f-firebase-adminsdk-9zb83-088889d4e9.json')
+        cred = credentials.Certificate('android-e489f-firebase-adminsdk-9zb83-088889d4e9.json')#Change the Firebase Admin Sdk File for running this Flask Server
         firebase_admin.initialize_app(cred)
 
 initialize_firebase()
