@@ -21,11 +21,11 @@ import com.example.android.PredictionRequest
 import com.example.android.PredictionResponse
 import com.example.android.R
 import com.example.android.RetrofitClient
-import com.example.android.channelId
 import com.google.android.gms.location.LocationServices
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class LocationWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
 
@@ -63,7 +63,7 @@ class LocationWorker(context: Context, params: WorkerParameters) : Worker(contex
                     val prediction = response.body()?.prediction
                     val message = if (prediction == 1) {
                         // Send notification logic here
-                        sendNotification("Heat Wave Predicted! Stay Safe!")
+                        "Heat Wave Predicted! Stay Safe!"
                     } else {
                         // Optionally handle no heat wave prediction case
                     }
@@ -79,36 +79,4 @@ class LocationWorker(context: Context, params: WorkerParameters) : Worker(contex
         })
     }
 
-    @SuppressLint("MissingPermission")
-    private fun sendNotification(message: String) {
-        val intent = Intent(applicationContext, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
-
-        val notificationBuilder = NotificationCompat.Builder(applicationContext, channelId)
-            .setContentTitle("Heat Wave Alert")
-            .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
-
-        val notificationManager = NotificationManagerCompat.from(applicationContext)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Heat Wave Alerts",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Channel for heat wave alerts"
-            }
-            notificationManager.createNotificationChannel(channel)
-        }
-
-
-        val notificationId = System.currentTimeMillis().toInt()
-        notificationManager.notify(notificationId, notificationBuilder.build())
-    }
 }
